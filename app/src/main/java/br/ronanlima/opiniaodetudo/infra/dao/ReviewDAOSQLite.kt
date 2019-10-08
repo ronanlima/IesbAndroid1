@@ -33,14 +33,7 @@ class ReviewDAOSQLite {
 
     fun list(): List<Review> {
         val readableDatabase = dbHelper.readableDatabase
-//        val query = readableDatabase.query(ReviewTableInfo.TABLE_NAME, arrayOf(
-//                ReviewTableInfo.COLUMN_ID,
-//                ReviewTableInfo.COLUMN_REVIEW
-//        ), null, null, null, null, null, null)
-//        val cursor = SQLiteDatabaseTools.selectAll(readableDatabase, ReviewTableInfo.TABLE_NAME, arrayOf(ReviewTableInfo.COLUMN_ID, ReviewTableInfo.COLUMN_REVIEW))
-//        val cursor = readableDatabase.selectAll(arrayOf(ReviewTableInfo.COLUMN_ID, ReviewTableInfo.COLUMN_REVIEW))
         val cursor = readableDatabase.selectAll(ReviewTableInfo.TABLE_NAME, arrayOf(ReviewTableInfo.COLUMN_ID, ReviewTableInfo.COLUMN_REVIEW))
-//        readableDatabase.selectAll("teste", arrayOf("a", "b"))
         val reviews = mutableListOf<Review>()
         while (cursor.moveToNext()) {
             reviews.add(createReview(cursor))
@@ -59,7 +52,4 @@ class ReviewDAOSQLite {
         return this.query(ReviewTableInfo.TABLE_NAME, columns, null, null, null, null, null)
     }
 
-//    fun SQLiteDatabase.query(tableName: String, columns: Array<String>, selection: String? = null, selectionArgs: String? = null, groupBy: String? = null, having: String? = null, orderBy: String? = null): Cursor {
-//        return this.query(tableName, columns, selection, selectionArgs, groupBy, having, orderBy)
-//    }
 }

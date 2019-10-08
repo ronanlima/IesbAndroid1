@@ -5,14 +5,10 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import br.ronanlima.opiniaodetudo.data.ReviewRepository
 import br.ronanlima.opiniaodetudo.infra.dao.ReviewDAOSQLite
-import br.ronanlima.opiniaodetudo.model.Review
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-
-    val arrayOpinioes = mutableListOf<Review>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +24,6 @@ class MainActivity : AppCompatActivity() {
         when (item?.itemId) {
             R.id.action_done -> {
                 tv_ultima_opiniao.setText(getString(R.string.ultima_opiniao, et_opiniao.text.toString()))
-//                ReviewRepository.instance.save(et_opiniao.text.toString())
                 val reviewDAOSQLite = ReviewDAOSQLite(this)
                 reviewDAOSQLite.save(et_opiniao.text.toString())
                 et_opiniao.text = null
