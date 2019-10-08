@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">OpiniaoDeTudo</string>
+    <string name="label_tv_informe_opiniao">Informe abaixo sua opinião</string>
+    <string name="hint_sua_opiniao">Sua opinião</string>
+    <string name="action_menu_done">Done</string>
+    <string name="ultima_opiniao">Última opinião: %s</string>
+</resources>
