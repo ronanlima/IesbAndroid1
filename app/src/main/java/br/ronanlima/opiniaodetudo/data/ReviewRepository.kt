@@ -1,5 +1,8 @@
 package br.ronanlima.opiniaodetudo.data
 
+import android.content.Context
+import br.ronanlima.opiniaodetudo.infra.dao.room.ReviewDAO
+import br.ronanlima.opiniaodetudo.infra.dao.room.ReviewDatabase
 import br.ronanlima.opiniaodetudo.model.Review
 import java.util.*
 
@@ -7,19 +10,24 @@ import java.util.*
  * Created by rlima on 17/09/19.
  */
 class ReviewRepository {
-    private constructor()
-
-    companion object {
-        val instance: ReviewRepository = ReviewRepository()
+    private val reviewDAO : ReviewDAO
+    
+    constructor(context: Context) {
+        val reviewDatabase = ReviewDatabase.getInstance(context)
+        reviewDAO = reviewDatabase.reviewDAO()
     }
 
     private val data = mutableListOf<Review>()
 
     fun save(opiniao: String) {
-        data.add(Review(UUID.randomUUID().toString(), opiniao))
+        reviewDAO.insert(Review(UUID.randomUUID().toString(), opiniao))
     }
 
     fun listAll() : List<Review> {
+        val cursor = reviewDAO.readAll()
+        while (cursor.moveToNext()) {
+            data.add(Review(cursor.getString(0), cursor.getString(1)))
+        }
         return data.toList()
     }
 

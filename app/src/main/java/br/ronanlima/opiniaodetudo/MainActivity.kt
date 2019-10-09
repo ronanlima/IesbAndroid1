@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import br.ronanlima.opiniaodetudo.infra.dao.ReviewDAOSQLite
+import br.ronanlima.opiniaodetudo.data.ReviewRepository
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -24,10 +24,14 @@ class MainActivity : AppCompatActivity() {
         when (item?.itemId) {
             R.id.action_done -> {
                 tv_ultima_opiniao.setText(getString(R.string.ultima_opiniao, et_opiniao.text.toString()))
-                val reviewDAOSQLite = ReviewDAOSQLite(this)
-                reviewDAOSQLite.save(et_opiniao.text.toString())
+
+                AppExecutors.getInstance().diskIO!!.execute {
+                    val reviewRepository = ReviewRepository(this@MainActivity.applicationContext)
+                    reviewRepository.save(et_opiniao.text.toString())
+                    startActivity(Intent(this, ListaActivity::class.java))
+                }
                 et_opiniao.text = null
-                startActivity(Intent(this, ListaActivity::class.java))
+
             }
             else -> {
                 throw RuntimeException("Opção inválida")
