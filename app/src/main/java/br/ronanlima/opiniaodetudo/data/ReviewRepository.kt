@@ -34,4 +34,8 @@ class ReviewRepository {
     fun getByPosition(posicao: Int) : Review {
         return data.get(posicao)
     }
+
+    fun delete(review: Review) : Unit {
+        return reviewDAO.delete(review)
+    }
 }
