@@ -23,6 +23,10 @@ class ReviewRepository {
         reviewDAO.insert(Review(UUID.randomUUID().toString(), opiniao))
     }
 
+    fun update(review: Review) {
+        reviewDAO.update(review)
+    }
+
     fun listAll() : List<Review> {
         val cursor = reviewDAO.readAll()
         while (cursor.moveToNext()) {

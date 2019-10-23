@@ -6,13 +6,20 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import br.ronanlima.opiniaodetudo.data.ReviewRepository
+import br.ronanlima.opiniaodetudo.model.Review
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
+    var reviewToEdit: Review? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        reviewToEdit = (intent?.getSerializableExtra("item") as Review?)?.also { rv ->
+            et_opiniao.setText(rv.opiniao)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -27,8 +34,14 @@ class MainActivity : AppCompatActivity() {
 
                 AppExecutors.getInstance().diskIO!!.execute {
                     val reviewRepository = ReviewRepository(this@MainActivity.applicationContext)
-                    reviewRepository.save(et_opiniao.text.toString())
-                    startActivity(Intent(this, ListaActivity::class.java))
+                    if (reviewToEdit == null) {
+                        reviewRepository.save(et_opiniao.text.toString())
+                        startActivity(Intent(this, ListaActivity::class.java))
+                    } else {
+                        reviewToEdit!!.opiniao = et_opiniao.text.toString()
+                        reviewRepository.update(reviewToEdit!!)
+                        finish()
+                    }
                 }
                 et_opiniao.text = null
 

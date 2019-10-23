@@ -1,5 +1,6 @@
 package br.ronanlima.opiniaodetudo
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.PopupMenu
@@ -23,6 +24,7 @@ class ListaActivity : AppCompatActivity() {
 
         val reviewRepository = ReviewRepository(this@ListaActivity.applicationContext)
         initListView(reviewRepository)
+        configureOnLongClickListener(reviewRepository)
     }
 
     private fun initListView(reviewRepository: ReviewRepository) {
@@ -38,17 +40,10 @@ class ListaActivity : AppCompatActivity() {
                         tvId.text = review.id
                         tvOpiniao.text = review.opiniao
                     }
-    //                    itemView.setOnLongClickListener {
-    //                        AppExecutors.getInstance().diskIO!!.execute {
-    //                            reviewRepository.delete(review)
-    //                        }
-    //                        true
-    //                    }
                     return itemView
                 }
             }
             list_view.adapter = adapter
-            configureOnLongClickListener(reviewRepository)
         }
     }
 
@@ -59,9 +54,12 @@ class ListaActivity : AppCompatActivity() {
             popupMenu.setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.action_edit -> {
-                        Toast.makeText(this, "Apagando ${reviews[position].opiniao}", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this, MainActivity::class.java)
+                        intent.putExtra("item", reviews[position])
+                        startActivity(intent)
                     }
                     R.id.action_delete -> {
+                        Toast.makeText(this, "Apagando ${reviews[position].opiniao}", Toast.LENGTH_SHORT).show()
                         AppExecutors.getInstance().diskIO!!.execute {
                             reviewRepository.delete(reviews[position])
                             AppExecutors.getInstance().mainThread!!.execute {
@@ -76,6 +74,17 @@ class ListaActivity : AppCompatActivity() {
             popupMenu.show()
             true // retorno indicando que o click foi consumido
         }
+    }
+
+    override fun onRestart() {
+        AppExecutors.getInstance().diskIO!!.execute {
+            reviews = ReviewRepository(this).listAll().toMutableList()
+            AppExecutors.getInstance().mainThread!!.execute{
+                val arrayAdapter = list_view.adapter as ArrayAdapter<Review>
+                arrayAdapter.notifyDataSetChanged()
+            }
+        }
+        super.onRestart()
     }
 
     override fun onSupportNavigateUp(): Boolean {

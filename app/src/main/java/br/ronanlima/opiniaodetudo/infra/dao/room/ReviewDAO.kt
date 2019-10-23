@@ -1,9 +1,6 @@
 package br.ronanlima.opiniaodetudo.infra.dao.room
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Delete
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.Query
+import android.arch.persistence.room.*
 import android.database.Cursor
 import br.ronanlima.opiniaodetudo.infra.dao.ReviewTableInfo
 import br.ronanlima.opiniaodetudo.model.Review
@@ -17,6 +14,9 @@ interface ReviewDAO {
 
     @Insert
     fun insert(review: Review)
+
+    @Update
+    fun update(review: Review)
 
     @Query("SELECT * FROM ${ReviewTableInfo.TABLE_NAME}")
     fun readAll(): Cursor
