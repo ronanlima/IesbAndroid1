@@ -6,4 +6,6 @@
     <string name="ultima_opiniao">Última opinião: %s</string>
     <string name="action_edit">Editar</string>
     <string name="action_delete">Excluir</string>
+    <string name="new_item">Novo item</string>
+    <string name="list_item">Listar itens</string>
 </resources>
