@@ -1,5 +1,7 @@
 package br.ronanlima.opiniaodetudo.view
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -16,6 +18,7 @@ import br.ronanlima.opiniaodetudo.MainActivity
 import br.ronanlima.opiniaodetudo.R
 import br.ronanlima.opiniaodetudo.data.ReviewRepository
 import br.ronanlima.opiniaodetudo.model.Review
+import br.ronanlima.opiniaodetudo.viewmodel.EditReviewViewModel
 
 
 /**
@@ -32,7 +35,15 @@ class ListFragment : Fragment() {
         var list_view = rootView.findViewById<ListView>(R.id.list_view)
         initListView(reviewRepository, list_view)
         configureOnLongClickListener(reviewRepository, list_view)
+        configureListObserver()
         return rootView
+    }
+
+    private fun configureListObserver() {
+        val viewModel = ViewModelProviders.of(activity!!).get(EditReviewViewModel::class.java)
+        viewModel.data.observe(this, Observer {
+            onResume()
+        })
     }
 
     private fun initListView(reviewRepository: ReviewRepository, list_view: ListView) {
@@ -51,7 +62,9 @@ class ListFragment : Fragment() {
                     return itemView
                 }
             }
-            list_view.setAdapter(adapter)
+            activity!!.runOnUiThread {
+                list_view.setAdapter(adapter)
+            }
         }
     }
 
