@@ -75,9 +75,11 @@ class ListFragment : Fragment() {
             popupMenu.setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.action_edit -> {
-                        val intent = Intent(activity!!, MainActivity::class.java)
-                        intent.putExtra("item", reviews[position])
-                        startActivity(intent)
+                        val review = reviews[position]
+                        val viewModel = ViewModelProviders.of(activity!!).get(EditReviewViewModel::class.java)
+                        viewModel.data.value = review
+                        val editDialogFragment = EditDialogFragment()
+                        editDialogFragment.show(fragmentManager, "edit_dialog")
                     }
                     R.id.action_delete -> {
                         Toast.makeText(activity!!, "Apagando ${reviews[position].opiniao}", Toast.LENGTH_SHORT).show()

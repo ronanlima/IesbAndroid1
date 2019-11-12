@@ -9,4 +9,6 @@
     <string name="new_item">Novo item</string>
     <string name="list_item">Listar itens</string>
     <string name="salvar">Salvar</string>
+    <string name="alerta_opiniao_vazia">Sério? Não vai escrever nada?</string>
+    <string name="atualizar">Atualizar</string>
 </resources>
