@@ -2,9 +2,9 @@ package br.ronanlima.opiniaodetudo.view
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.PopupMenu
 import android.view.LayoutInflater
 import android.view.View
@@ -12,13 +12,12 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
-import android.widget.Toast
 import br.ronanlima.opiniaodetudo.AppExecutors
-import br.ronanlima.opiniaodetudo.MainActivity
 import br.ronanlima.opiniaodetudo.R
 import br.ronanlima.opiniaodetudo.data.ReviewRepository
 import br.ronanlima.opiniaodetudo.model.Review
 import br.ronanlima.opiniaodetudo.viewmodel.EditReviewViewModel
+import kotlinx.android.synthetic.main.fragment_list.*
 
 
 /**
@@ -82,14 +81,7 @@ class ListFragment : Fragment() {
                         editDialogFragment.show(fragmentManager, "edit_dialog")
                     }
                     R.id.action_delete -> {
-                        Toast.makeText(activity!!, "Apagando ${reviews[position].opiniao}", Toast.LENGTH_SHORT).show()
-                        AppExecutors.getInstance().diskIO!!.execute {
-                            reviewRepository.delete(reviews[position])
-                            AppExecutors.getInstance().mainThread!!.execute {
-                                val adapter1 = list_view.adapter as ArrayAdapter<Review>
-                                adapter1.remove(reviews[position])
-                            }
-                        }
+                        askForDelete(reviews[position])
                     }
                 }
                 true
@@ -97,6 +89,32 @@ class ListFragment : Fragment() {
             popupMenu.show()
             true // retorno indicando que o click foi consumido
         }
+    }
+
+    private fun delete(item: Review) {
+        AppExecutors.getInstance().diskIO!!.execute {
+            val reviewRepository = ReviewRepository(activity!!.applicationContext)
+            reviewRepository.delete(item)
+            AppExecutors.getInstance().mainThread!!.execute {
+                val adapter1 = list_view.adapter as ArrayAdapter<Review>
+                adapter1.remove(item)
+            }
+        }
+    }
+
+    private fun askForDelete(review: Review) {
+        AlertDialog.Builder(activity!!)
+                .setMessage(getString(R.string.alerta_excluir))
+                .setTitle(getString(R.string.titulo_alerta_excluir))
+                .setPositiveButton(R.string.ok) { _, _ ->
+                    this.delete(review)
+                }
+                .setNegativeButton(R.string.cancelar) { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .create()
+                .show()
+
     }
 
     override fun onResume() {

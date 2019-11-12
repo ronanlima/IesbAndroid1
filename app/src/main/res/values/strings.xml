@@ -11,4 +11,8 @@
     <string name="salvar">Salvar</string>
     <string name="alerta_opiniao_vazia">Sério? Não vai escrever nada?</string>
     <string name="atualizar">Atualizar</string>
+    <string name="alerta_excluir">Deseja realmente excluir esse registro?</string>
+    <string name="titulo_alerta_excluir">Cuidado!</string>
+    <string name="ok">Ok</string>
+    <string name="cancelar">Cancelar</string>
 </resources>
