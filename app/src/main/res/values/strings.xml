@@ -15,4 +15,6 @@
     <string name="titulo_alerta_excluir">Cuidado!</string>
     <string name="ok">Ok</string>
     <string name="cancelar">Cancelar</string>
+    <string name="hint_titulo">Título</string>
+    <string name="informe_o_titulo">Informe o título</string>
 </resources>

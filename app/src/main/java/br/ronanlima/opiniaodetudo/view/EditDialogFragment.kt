@@ -38,16 +38,18 @@ class EditDialogFragment : DialogFragment() {
     }
 
     fun initView(view: View) {
+        val etTitle = view.findViewById<EditText>(R.id.et_title)
         val etReview = view.findViewById<EditText>(R.id.et_review)
         val btUpdate = view.findViewById<Button>(R.id.bt_update)
 
         val viewModel = ViewModelProviders.of(activity!!).get(EditReviewViewModel::class.java)
         val review = viewModel.data.value!!
         etReview.setText(review.opiniao)
+        etTitle.setText(review.titulo)
 
         btUpdate.setOnClickListener {
-            if (!TextUtils.isEmpty(etReview.text.toString())) {
-                val reviewUpdate = Review(review.id, etReview.text.toString())
+            if (!TextUtils.isEmpty(etReview.text.toString()) && !TextUtils.isEmpty(etTitle.text.toString())) {
+                val reviewUpdate = Review(review.id, etReview.text.toString(), etTitle.text.toString())
                 AppExecutors.getInstance().diskIO!!.execute {
                     ReviewRepository(activity!!.applicationContext).update(reviewUpdate)
                 }

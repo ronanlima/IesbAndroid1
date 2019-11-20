@@ -19,8 +19,8 @@ class ReviewRepository {
 
     private val data = mutableListOf<Review>()
 
-    fun save(opiniao: String) {
-        reviewDAO.insert(Review(UUID.randomUUID().toString(), opiniao))
+    fun save(opiniao: String, titulo: String) {
+        reviewDAO.insert(Review(UUID.randomUUID().toString(), opiniao, titulo))
     }
 
     fun update(review: Review) {
@@ -30,7 +30,7 @@ class ReviewRepository {
     fun listAll() : List<Review> {
         val cursor = reviewDAO.readAll()
         while (cursor.moveToNext()) {
-            data.add(Review(cursor.getString(0), cursor.getString(1)))
+            data.add(Review(cursor.getString(0), cursor.getString(1), cursor.getString(2)))
         }
         return data.toList()
     }

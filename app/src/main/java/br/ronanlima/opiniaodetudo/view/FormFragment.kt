@@ -34,22 +34,23 @@ class FormFragment : Fragment() {
         rootView = inflater.inflate(R.layout.fragment_form, container, false)
 
         val etOpiniao = rootView.findViewById<EditText>(R.id.et_opiniao)
+        val etTitle = rootView.findViewById<EditText>(R.id.et_title)
         reviewToEdit = (activity!!.intent?.getSerializableExtra("item") as Review?)?.also { rv ->
             etOpiniao.setText(rv.opiniao)
+            etTitle.setText(rv.titulo)
         }
 
         configureAutoHiddenKeyboard()
         var btSalvar = rootView.findViewById<Button>(R.id.bt_salvar)
         btSalvar.setOnClickListener {
-            tv_ultima_opiniao.setText(getString(R.string.ultima_opiniao, et_opiniao.text.toString()))
-
             AppExecutors.getInstance().diskIO!!.execute {
                 val reviewRepository = ReviewRepository(activity!!.applicationContext)
                 if (reviewToEdit == null) {
-                    reviewRepository.save(et_opiniao.text.toString())
+                    reviewRepository.save(et_opiniao.text.toString(), etTitle.text.toString())
                     startActivity(Intent(activity!!, ListaActivity::class.java))
                 } else {
                     reviewToEdit!!.opiniao = et_opiniao.text.toString()
+                    reviewToEdit!!.titulo = et_title.text.toString()
                     reviewRepository.update(reviewToEdit!!)
                     activity!!.finish()
                 }

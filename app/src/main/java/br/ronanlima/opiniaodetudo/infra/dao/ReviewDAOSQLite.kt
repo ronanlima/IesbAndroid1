@@ -45,7 +45,8 @@ class ReviewDAOSQLite {
     fun createReview(cursor: Cursor): Review {
         val id = cursor.getString(0)
         val review = cursor.getString(1)
-        return Review(id, review)
+        val title = cursor.getString(2)
+        return Review(id, review, title)
     }
 
     fun SQLiteDatabase.selectAll(columns: Array<String>): Cursor {

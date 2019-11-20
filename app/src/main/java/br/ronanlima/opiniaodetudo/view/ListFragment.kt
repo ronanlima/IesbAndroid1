@@ -27,6 +27,7 @@ class ListFragment : Fragment() {
 
     private lateinit var reviews: MutableList<Review>
     private lateinit var rootView: View
+    private lateinit var adapter: ArrayAdapter<Review>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_list, container, false)
@@ -48,14 +49,14 @@ class ListFragment : Fragment() {
     private fun initListView(reviewRepository: ReviewRepository, list_view: ListView) {
         AppExecutors.getInstance().diskIO!!.execute {
             reviews = reviewRepository.listAll().toMutableList()
-            val adapter = object : ArrayAdapter<Review>(activity!!, -1, reviews) {
+            adapter = object : ArrayAdapter<Review>(activity!!, -1, reviews) {
                 override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
                     val itemView = layoutInflater.inflate(R.layout.review_list_item_layout, null)
                     val review = reviews.get(position)
-                    val tvId = itemView.findViewById<TextView>(R.id.tv_id)
+                    val tvTitle = itemView.findViewById<TextView>(R.id.tv_title)
                     val tvOpiniao = itemView.findViewById<TextView>(R.id.tv_opiniao)
-                    AppExecutors.getInstance().mainThread!!.execute {
-                        tvId.text = review.id
+                    activity?.runOnUiThread {
+                        tvTitle.text = review.titulo
                         tvOpiniao.text = review.opiniao
                     }
                     return itemView
@@ -120,7 +121,7 @@ class ListFragment : Fragment() {
     override fun onResume() {
         AppExecutors.getInstance().diskIO!!.execute {
             reviews = ReviewRepository(activity!!).listAll().toMutableList()
-            AppExecutors.getInstance().mainThread!!.execute {
+            activity?.runOnUiThread {
                 val list_view = rootView.findViewById<ListView>(R.id.list_view)
                 val arrayAdapter = list_view.adapter as ArrayAdapter<Review>
                 arrayAdapter.notifyDataSetChanged()
