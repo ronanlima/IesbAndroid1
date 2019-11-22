@@ -6,6 +6,7 @@ import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.migration.Migration
 import android.content.Context
+import br.ronanlima.opiniaodetudo.infra.dao.ReviewTableInfo
 import br.ronanlima.opiniaodetudo.model.Review
 
 /**
@@ -20,8 +21,7 @@ abstract class ReviewDatabase : RoomDatabase() {
         fun getInstance(context: Context): ReviewDatabase {
             if (instance == null) {
                 instance = Room.databaseBuilder(context, ReviewDatabase::class.java, "review_database")
-                        .addMigrations()
-                        .addMigrations(MIGRATION_1_2)
+                        .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
                         .build()
             }
             return instance!!
@@ -29,7 +29,14 @@ abstract class ReviewDatabase : RoomDatabase() {
 
         val MIGRATION_1_2 = object : Migration(1, 2) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("ALTER TABLE Review ADD COLUMN titulo TEXT NOT NULL DEFAULT 'Não informado'")
+                database.execSQL("ALTER TABLE ${ReviewTableInfo.TABLE_NAME} ADD COLUMN ${ReviewTableInfo.COLUMN_TITULO} TEXT NOT NULL DEFAULT 'Não informado'")
+            }
+        }
+
+        val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE ${ReviewTableInfo.TABLE_NAME} ADD COLUMN ${ReviewTableInfo.COLUMN_PHOTO_PATH} TEXT")
+                database.execSQL("ALTER TABLE ${ReviewTableInfo.TABLE_NAME} ADD COLUMN ${ReviewTableInfo.COLUMN_THUMBNAIL} BLOB")
             }
         }
     }

@@ -1,9 +1,14 @@
 package br.ronanlima.opiniaodetudo.view
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.media.ThumbnailUtils
 import android.os.Bundle
 import android.provider.MediaStore
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.content.FileProvider
 import android.view.LayoutInflater
@@ -13,13 +18,13 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import br.ronanlima.opiniaodetudo.AppExecutors
-import br.ronanlima.opiniaodetudo.ListaActivity
-import br.ronanlima.opiniaodetudo.R
+import br.ronanlima.opiniaodetudo.*
 import br.ronanlima.opiniaodetudo.data.ReviewRepository
 import br.ronanlima.opiniaodetudo.model.Review
 import kotlinx.android.synthetic.main.fragment_form.*
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileInputStream
 
 /**
  * Created by rlima on 05/11/19.
@@ -31,6 +36,7 @@ class FormFragment : Fragment() {
     }
 
     private var file: File? = null
+    private var thumbnailBytes: ByteArray? = null
     var reviewToEdit: Review? = null
     private lateinit var rootView: View
 
@@ -55,16 +61,18 @@ class FormFragment : Fragment() {
             AppExecutors.getInstance().diskIO!!.execute {
                 val reviewRepository = ReviewRepository(activity!!.applicationContext)
                 if (reviewToEdit == null) {
-                    reviewRepository.save(et_opiniao.text.toString(), etTitle.text.toString())
-                    startActivity(Intent(activity!!, ListaActivity::class.java))
+                    reviewRepository.save(etOpiniao.text.toString(), etTitle.text.toString(), file?.toRelativeString(activity!!.filesDir), thumbnailBytes)
+                    (activity!! as MainActivity).navigateTo(MainActivity.LIST_FRAGMENT)
                 } else {
                     reviewToEdit!!.opiniao = et_opiniao.text.toString()
                     reviewToEdit!!.titulo = et_title.text.toString()
                     reviewRepository.update(reviewToEdit!!)
                     activity!!.finish()
                 }
+                et_opiniao.text = null
+                et_title.text = null
+                iv_camera.setImageBitmap(null)
             }
-            et_opiniao.text = null
         }
         configurePhotoClick()
         return rootView
@@ -72,9 +80,9 @@ class FormFragment : Fragment() {
 
     private fun configurePhotoClick() {
         rootView.findViewById<ImageView>(R.id.iv_camera).setOnClickListener {
-            val filename = "${System.nanoTime()}.jpg"
+            val filename = "${System.nanoTime()}.jpeg"
             file = File(activity!!.filesDir, filename)
-            val uri = FileProvider.getUriForFile(activity!!, "br.ronanlima.opiniaodetudo.fileprovider", file!!)
+            val uri = FileProvider.getUriForFile(activity!!, "${BuildConfig.APPLICATION_ID}.fileprovider", file!!)
             val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
             startActivityForResult(intent, TAKE_PICTURE_RESULT)
@@ -84,8 +92,27 @@ class FormFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == TAKE_PICTURE_RESULT) {
-
+            if (resultCode == Activity.RESULT_OK) {
+                val ivCamera = rootView.findViewById<ImageView>(R.id.iv_camera)
+                val bitmap = BitmapFactory.decodeStream(FileInputStream(file))
+                val targetSize = 100
+                val thumbnail = ThumbnailUtils.extractThumbnail(bitmap, targetSize, targetSize)
+                generateThumbnailBytes(thumbnail, targetSize)
+                ivCamera.setImageBitmap(thumbnail)
+            } else {
+                showToast(getString(R.string.erro_tirar_foto))
+            }
         }
+    }
+
+    private fun generateThumbnailBytes(thumbnail: Bitmap, targetSize: Int) {
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        thumbnail.compress(Bitmap.CompressFormat.PNG, targetSize, byteArrayOutputStream)
+        thumbnailBytes = byteArrayOutputStream.toByteArray()
+    }
+
+    private fun showToast(message: String) {
+        Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT).show()
     }
 
     private fun configureAutoHiddenKeyboard() {

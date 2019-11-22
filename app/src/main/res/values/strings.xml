@@ -19,4 +19,5 @@
     <string name="informe_o_titulo">Informe o título</string>
     <string name="nova_opiniao">Nova Opinião</string>
     <string name="foto">Foto</string>
+    <string name="erro_tirar_foto">Erro ao capturar a foto</string>
 </resources>
