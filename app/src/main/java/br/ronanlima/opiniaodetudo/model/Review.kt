@@ -17,8 +17,15 @@ data class Review(
         @ColumnInfo(name = "photo_path")
         val photoPath: String? = null,
         @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
-        val thumbnail: ByteArray? = null) : Serializable {
+        val thumbnail: ByteArray? = null,
+        @ColumnInfo(typeAffinity = ColumnInfo.REAL)
+        var latitude: Double?,
+        @ColumnInfo(typeAffinity = ColumnInfo.REAL)
+        var longitude: Double?) : Serializable {
 
     @Ignore
     constructor(id: String, opiniao: String, titulo: String) : this(id, opiniao, titulo, null, null)
+
+    @Ignore
+    constructor(id: String, opiniao: String, titulo: String, photoPath: String?, thumbnail: ByteArray?) : this(id, opiniao, titulo, photoPath, thumbnail, null, null)
 }

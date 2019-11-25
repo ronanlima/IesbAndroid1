@@ -21,6 +21,7 @@ import android.widget.ImageView
 import br.ronanlima.opiniaodetudo.*
 import br.ronanlima.opiniaodetudo.data.ReviewRepository
 import br.ronanlima.opiniaodetudo.model.Review
+import br.ronanlima.opiniaodetudo.service.LocationService
 import kotlinx.android.synthetic.main.fragment_form.*
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -69,6 +70,7 @@ class FormFragment : Fragment() {
                     reviewRepository.update(reviewToEdit!!)
                     activity!!.finish()
                 }
+                updateReviewLocation(reviewToEdit!!)
                 et_opiniao.text = null
                 et_title.text = null
                 iv_camera.setImageBitmap(null)
@@ -109,6 +111,15 @@ class FormFragment : Fragment() {
         val byteArrayOutputStream = ByteArrayOutputStream()
         thumbnail.compress(Bitmap.CompressFormat.PNG, targetSize, byteArrayOutputStream)
         thumbnailBytes = byteArrayOutputStream.toByteArray()
+    }
+
+    private fun updateReviewLocation(entity: Review) {
+        LocationService(activity!!).onLocationObtained{ lat, long ->
+            val repository = ReviewRepository(activity!!)
+            AppExecutors.getInstance().diskIO!!.execute {
+                repository.updateLocation(entity, lat, long)
+            }
+        }
     }
 
     private fun showToast(message: String) {

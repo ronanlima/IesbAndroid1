@@ -12,7 +12,7 @@ import br.ronanlima.opiniaodetudo.model.Review
 /**
  * Created by rlima on 08/10/19.
  */
-@Database(entities = arrayOf(Review::class), version = 2)
+@Database(entities = arrayOf(Review::class), version = 4)
 abstract class ReviewDatabase : RoomDatabase() {
 
     companion object {
@@ -21,7 +21,7 @@ abstract class ReviewDatabase : RoomDatabase() {
         fun getInstance(context: Context): ReviewDatabase {
             if (instance == null) {
                 instance = Room.databaseBuilder(context, ReviewDatabase::class.java, "review_database")
-                        .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+                        .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
                         .build()
             }
             return instance!!
@@ -37,6 +37,13 @@ abstract class ReviewDatabase : RoomDatabase() {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("ALTER TABLE ${ReviewTableInfo.TABLE_NAME} ADD COLUMN ${ReviewTableInfo.COLUMN_PHOTO_PATH} TEXT")
                 database.execSQL("ALTER TABLE ${ReviewTableInfo.TABLE_NAME} ADD COLUMN ${ReviewTableInfo.COLUMN_THUMBNAIL} BLOB")
+            }
+        }
+
+        val MIGRATION_3_4 = object : Migration(3, 4) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE ${ReviewTableInfo.TABLE_NAME} ADD COLUMN ${ReviewTableInfo.COLUMN_LATITUDE} REAL")
+                database.execSQL("ALTER TABLE ${ReviewTableInfo.TABLE_NAME} ADD COLUMN ${ReviewTableInfo.COLUMN_LONGITUDE} REAL")
             }
         }
     }
