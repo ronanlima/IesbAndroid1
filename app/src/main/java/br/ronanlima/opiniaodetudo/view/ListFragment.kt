@@ -4,11 +4,13 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.location.Geocoder
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.PopupMenu
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +24,7 @@ import br.ronanlima.opiniaodetudo.data.ReviewRepository
 import br.ronanlima.opiniaodetudo.model.Review
 import br.ronanlima.opiniaodetudo.viewmodel.EditReviewViewModel
 import kotlinx.android.synthetic.main.fragment_list.*
+import java.util.*
 
 
 /**
@@ -122,9 +125,17 @@ class ListFragment : Fragment() {
     }
 
     private fun openMap(review: Review) {
+        printHumanLocation(review)
         val uri = Uri.parse("geo:${review.latitude},${review.longitude}")
         val intent = Intent(Intent.ACTION_VIEW, uri)
         activity!!.startActivity(intent)
+    }
+
+    private fun printHumanLocation(review: Review) {
+        val geocoder = Geocoder(activity!!, Locale.getDefault())
+        for (address in geocoder.getFromLocation(review.latitude!!, review.longitude!!, 1)) {
+            Log.i("GEOCODER", address.toString())
+        }
     }
 
     private fun askForDelete(review: Review) {
