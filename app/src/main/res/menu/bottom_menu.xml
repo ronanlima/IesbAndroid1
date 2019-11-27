@@ -4,14 +4,15 @@
 
     <item
         android:id="@+id/action_new_item"
+        android:icon="@drawable/iconmenu_new"
         android:orderInCategory="1"
         android:title="@string/new_item"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/action_list_item"
+        android:icon="@drawable/iconmenu_list"
         android:orderInCategory="2"
         android:title="@string/list_item"
-        android:iconTint="#fff"
         app:showAsAction="always" />
 </menu>
