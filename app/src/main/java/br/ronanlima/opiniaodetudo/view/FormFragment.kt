@@ -18,7 +18,10 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import br.ronanlima.opiniaodetudo.*
+import br.ronanlima.opiniaodetudo.AppExecutors
+import br.ronanlima.opiniaodetudo.BuildConfig
+import br.ronanlima.opiniaodetudo.MainActivity
+import br.ronanlima.opiniaodetudo.R
 import br.ronanlima.opiniaodetudo.data.ReviewRepository
 import br.ronanlima.opiniaodetudo.model.Review
 import br.ronanlima.opiniaodetudo.service.LocationService
@@ -62,7 +65,8 @@ class FormFragment : Fragment() {
             AppExecutors.getInstance().diskIO!!.execute {
                 val reviewRepository = ReviewRepository(activity!!.applicationContext)
                 if (reviewToEdit == null) {
-                    reviewRepository.save(etOpiniao.text.toString(), etTitle.text.toString(), file?.toRelativeString(activity!!.filesDir), thumbnailBytes)
+                    reviewToEdit = reviewRepository.save(etOpiniao.text.toString(), etTitle.text.toString(), file?.toRelativeString(activity!!.filesDir), thumbnailBytes)
+                    limpaCampos()
                     (activity!! as MainActivity).navigateTo(MainActivity.LIST_FRAGMENT)
                 } else {
                     reviewToEdit!!.opiniao = et_opiniao.text.toString()
@@ -71,13 +75,18 @@ class FormFragment : Fragment() {
                     activity!!.finish()
                 }
                 updateReviewLocation(reviewToEdit!!)
-                et_opiniao.text = null
-                et_title.text = null
-                iv_camera.setImageBitmap(null)
             }
         }
         configurePhotoClick()
         return rootView
+    }
+
+    private fun limpaCampos() {
+        activity!!.runOnUiThread {
+            et_opiniao.text = null
+            et_title.text = null
+            iv_camera.setImageBitmap(null)
+        }
     }
 
     private fun configurePhotoClick() {
@@ -114,10 +123,12 @@ class FormFragment : Fragment() {
     }
 
     private fun updateReviewLocation(entity: Review) {
-        LocationService(activity!!).onLocationObtained{ lat, long ->
-            val repository = ReviewRepository(activity!!)
-            AppExecutors.getInstance().diskIO!!.execute {
-                repository.updateLocation(entity, lat, long)
+        activity!!.runOnUiThread {
+            LocationService(activity!!).onLocationObtained { lat, long ->
+                val repository = ReviewRepository(activity!!)
+                AppExecutors.getInstance().diskIO!!.execute {
+                    repository.updateLocation(entity, lat, long)
+                }
             }
         }
     }
