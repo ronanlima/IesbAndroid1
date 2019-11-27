@@ -38,7 +38,7 @@ class ListFragment : Fragment() {
         val reviewRepository = ReviewRepository(activity!!.applicationContext)
         var list_view = rootView.findViewById<ListView>(R.id.list_view)
         initListView(reviewRepository, list_view)
-        configureOnLongClickListener(reviewRepository, list_view)
+        configureOnLongClickListener(list_view)
         configureListObserver()
         return rootView
     }
@@ -77,7 +77,7 @@ class ListFragment : Fragment() {
         }
     }
 
-    private fun configureOnLongClickListener(reviewRepository: ReviewRepository, list_view: ListView) {
+    private fun configureOnLongClickListener(list_view: ListView) {
         list_view.setOnItemLongClickListener { parent, view, position, id ->
             val popupMenu = PopupMenu(activity!!, view)
             popupMenu.inflate(R.menu.list_review_item_menu)
