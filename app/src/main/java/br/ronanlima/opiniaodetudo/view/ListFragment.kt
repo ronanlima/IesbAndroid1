@@ -2,7 +2,9 @@ package br.ronanlima.opiniaodetudo.view
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
@@ -91,8 +93,17 @@ class ListFragment : Fragment() {
                     R.id.action_delete -> {
                         askForDelete(reviews[position])
                     }
+                    R.id.action_open_map -> {
+                        openMap(reviews[position])
+                    }
                 }
                 true
+            }
+            reviews[position].apply {
+                if (latitude != null && longitude != null) {
+                    val item = popupMenu.menu.findItem(R.id.action_open_map)
+                    item.setVisible(true)
+                }
             }
             popupMenu.show()
             true // retorno indicando que o click foi consumido
@@ -108,6 +119,12 @@ class ListFragment : Fragment() {
                 adapter1.remove(item)
             }
         }
+    }
+
+    private fun openMap(review: Review) {
+        val uri = Uri.parse("geo:${review.latitude},${review.longitude}")
+        val intent = Intent(Intent.ACTION_VIEW, uri)
+        activity!!.startActivity(intent)
     }
 
     private fun askForDelete(review: Review) {

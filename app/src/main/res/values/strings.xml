@@ -20,4 +20,5 @@
     <string name="nova_opiniao">Nova Opinião</string>
     <string name="foto">Foto</string>
     <string name="erro_tirar_foto">Erro ao capturar a foto</string>
+    <string name="abrir_no_mapa">Abrir no mapa</string>
 </resources>

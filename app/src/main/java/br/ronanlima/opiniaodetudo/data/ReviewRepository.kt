@@ -38,7 +38,7 @@ class ReviewRepository {
     fun listAll(): List<Review> {
         val cursor = reviewDAO.readAll()
         while (cursor.moveToNext()) {
-            data.add(Review(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getBlob(4)))
+            data.add(Review(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getBlob(4), cursor.getDouble(5), cursor.getDouble(6)))
         }
         return data.toList()
     }
