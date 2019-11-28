@@ -86,7 +86,7 @@
         android:id="@+id/iv_camera"
         android:layout_width="140dp"
         android:layout_height="140dp"
-        android:background="@android:drawable/ic_menu_camera"
+        android:background="@drawable/ic_camera"
         app:layout_constraintBottom_toTopOf="@id/bt_salvar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
