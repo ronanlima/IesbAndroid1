@@ -62,19 +62,23 @@ class FormFragment : Fragment() {
         configureAutoHiddenKeyboard()
         var btSalvar = rootView.findViewById<Button>(R.id.bt_salvar)
         btSalvar.setOnClickListener {
-            AppExecutors.getInstance().diskIO!!.execute {
-                val reviewRepository = ReviewRepository(activity!!.applicationContext)
-                if (reviewToEdit == null) {
-                    reviewToEdit = reviewRepository.save(etOpiniao.text.toString(), etTitle.text.toString(), file?.toRelativeString(activity!!.filesDir), thumbnailBytes)
-                    limpaCampos()
-                    (activity!! as MainActivity).navigateTo(MainActivity.LIST_FRAGMENT)
-                } else {
-                    reviewToEdit!!.opiniao = et_opiniao.text.toString()
-                    reviewToEdit!!.titulo = et_title.text.toString()
-                    reviewRepository.update(reviewToEdit!!)
-                    activity!!.finish()
+            if (etTitle.text.toString().trim().isEmpty() || etOpiniao.text.toString().trim().isEmpty()) {
+                showToast(getString(R.string.alerta_opiniao_vazia))
+            } else {
+                AppExecutors.getInstance().diskIO!!.execute {
+                    val reviewRepository = ReviewRepository(activity!!.applicationContext)
+                    if (reviewToEdit == null) {
+                        reviewToEdit = reviewRepository.save(etOpiniao.text.toString(), etTitle.text.toString(), file?.toRelativeString(activity!!.filesDir), thumbnailBytes)
+                        limpaCampos()
+                        (activity!! as MainActivity).navigateTo(MainActivity.LIST_FRAGMENT)
+                    } else {
+                        reviewToEdit!!.opiniao = et_opiniao.text.toString()
+                        reviewToEdit!!.titulo = et_title.text.toString()
+                        reviewRepository.update(reviewToEdit!!)
+                        activity!!.finish()
+                    }
+                    updateReviewLocation(reviewToEdit!!)
                 }
-                updateReviewLocation(reviewToEdit!!)
             }
         }
         configurePhotoClick()
