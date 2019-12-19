@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 import br.ronanlima.opiniaodetudo.AppExecutors
 import br.ronanlima.opiniaodetudo.R
@@ -29,11 +30,7 @@ class EditDialogFragment : DialogFragment() {
     }
 
     override fun onResume() {
-        val params = dialog.window.attributes.apply {
-            val width = ViewGroup.LayoutParams.MATCH_PARENT
-            val height = ViewGroup.LayoutParams.MATCH_PARENT
-        }
-        dialog.window.attributes = params
+        dialog.window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         super.onResume()
     }
 
@@ -41,6 +38,7 @@ class EditDialogFragment : DialogFragment() {
         val etTitle = view.findViewById<EditText>(R.id.et_title)
         val etReview = view.findViewById<EditText>(R.id.et_review)
         val btUpdate = view.findViewById<Button>(R.id.bt_update)
+        val ivClose = view.findViewById<ImageView>(R.id.iv_close)
 
         val viewModel = ViewModelProviders.of(activity!!).get(EditReviewViewModel::class.java)
         val review = viewModel.data.value!!
@@ -58,6 +56,10 @@ class EditDialogFragment : DialogFragment() {
             } else {
                 Toast.makeText(activity, getString(R.string.alerta_opiniao_vazia), Toast.LENGTH_SHORT).show()
             }
+        }
+
+        ivClose.setOnClickListener {
+            this.dismiss()
         }
     }
 }
