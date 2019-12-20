@@ -14,7 +14,6 @@ import android.widget.Toast
 import br.ronanlima.opiniaodetudo.AppExecutors
 import br.ronanlima.opiniaodetudo.R
 import br.ronanlima.opiniaodetudo.data.ReviewRepository
-import br.ronanlima.opiniaodetudo.model.Review
 import br.ronanlima.opiniaodetudo.viewmodel.EditReviewViewModel
 
 /**
@@ -47,11 +46,12 @@ class EditDialogFragment : DialogFragment() {
 
         btUpdate.setOnClickListener {
             if (!TextUtils.isEmpty(etReview.text.toString()) && !TextUtils.isEmpty(etTitle.text.toString())) {
-                val reviewUpdate = Review(review.id, etReview.text.toString(), etTitle.text.toString())
+                review.opiniao = etReview.text.toString()
+                review.titulo = etTitle.text.toString()
                 AppExecutors.getInstance().diskIO!!.execute {
-                    ReviewRepository(activity!!.applicationContext).update(reviewUpdate)
+                    ReviewRepository(activity!!.applicationContext).update(review)
+                    viewModel.data!!.value = review
                 }
-                viewModel.data!!.value = reviewUpdate
                 this.dismiss()
             } else {
                 Toast.makeText(activity, getString(R.string.alerta_opiniao_vazia), Toast.LENGTH_SHORT).show()

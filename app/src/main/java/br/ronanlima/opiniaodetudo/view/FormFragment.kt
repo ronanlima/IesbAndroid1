@@ -11,6 +11,7 @@ import android.provider.MediaStore
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.content.FileProvider
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -62,7 +63,7 @@ class FormFragment : Fragment() {
         configureAutoHiddenKeyboard()
         var btSalvar = rootView.findViewById<Button>(R.id.bt_salvar)
         btSalvar.setOnClickListener {
-            if (etTitle.text.toString().trim().isEmpty() || etOpiniao.text.toString().trim().isEmpty()) {
+            if (TextUtils.isEmpty(etTitle.text.toString()) || TextUtils.isEmpty(etOpiniao.text.toString())) {
                 showToast(getString(R.string.alerta_opiniao_vazia))
             } else {
                 AppExecutors.getInstance().diskIO!!.execute {
