@@ -9,4 +9,13 @@
     <color name="colorDivider">#BDBDBD</color>
     <color name="background">#F9F9F9</color>
     <color name="branco">#fff</color>
+
+    <color name="night_colorPrimary">#616161</color>
+    <color name="night_colorPrimaryDark">#212121</color>
+    <color name="night_colorAccent">#FFEE58</color>
+    <color name="night_colorBackground">#424242</color>
+    <color name="night_textColor">#EEEEEE</color>
+    <color name="night_textColorSecondary">#BDBDBD</color>
+    <color name="night_textColorHint">#FAFAFA</color>
+    <color name="night_divider">#FFF9C4</color>
 </resources>
