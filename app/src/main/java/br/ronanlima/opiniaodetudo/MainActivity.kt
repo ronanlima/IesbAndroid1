@@ -34,7 +34,9 @@ class MainActivity : AppCompatActivity() {
                 .commit()
 //        configureAutoHiddenKeyboard()
         configureBottomMenu()
-        navigateTo(FORM_FRAGMENT)
+        if (savedInstanceState == null) {
+            navigateTo(FORM_FRAGMENT)
+        }
         askForGPSPermission()
     }
 
@@ -84,6 +86,7 @@ class MainActivity : AppCompatActivity() {
 
         supportFragmentManager
                 .beginTransaction()
+                .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
                 .replace(R.id.fragment_container, fragmentInstance)
                 .addToBackStack(item)
                 .commit()

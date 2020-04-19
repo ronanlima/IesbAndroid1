@@ -1,6 +1,7 @@
 package br.ronanlima.opiniaodetudo.view
 
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -9,12 +10,14 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProviders
 import br.ronanlima.opiniaodetudo.AppExecutors
 import br.ronanlima.opiniaodetudo.R
 import br.ronanlima.opiniaodetudo.data.ReviewRepository
 import br.ronanlima.opiniaodetudo.viewmodel.EditReviewViewModel
+import kotlinx.android.synthetic.main.dialog_edit_review.*
 
 /**
  * Created by rlima on 05/11/19.
@@ -26,6 +29,16 @@ class EditDialogFragment : DialogFragment() {
         val view = inflater.inflate(R.layout.dialog_edit_review, null)
         initView(view)
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val nightMode = PreferenceManager.getDefaultSharedPreferences(this.context).getBoolean(SettingsFragment.NIGHT_MODE_PREF, false)
+        if (nightMode) {
+            iv_close.setColorFilter(ContextCompat.getColor(activity!!, R.color.night_textColor))
+        } else {
+            iv_close.setColorFilter(ContextCompat.getColor(activity!!, R.color.colorPrimaryText))
+        }
     }
 
     override fun onResume() {
