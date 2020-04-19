@@ -1,15 +1,10 @@
 package br.ronanlima.opiniaodetudo.view
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.location.Geocoder
 import android.net.Uri
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AlertDialog
-import android.support.v7.widget.PopupMenu
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +13,11 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.PopupMenu
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import br.ronanlima.opiniaodetudo.AppExecutors
 import br.ronanlima.opiniaodetudo.R
 import br.ronanlima.opiniaodetudo.data.ReviewRepository
@@ -91,7 +91,7 @@ class ListFragment : Fragment() {
                         val viewModel = ViewModelProviders.of(activity!!).get(EditReviewViewModel::class.java)
                         viewModel.data.value = review
                         val editDialogFragment = EditDialogFragment()
-                        editDialogFragment.show(fragmentManager, "edit_dialog")
+                        editDialogFragment.show(fragmentManager!!, "edit_dialog")
                     }
                     R.id.action_delete -> {
                         askForDelete(reviews[position])

@@ -8,9 +8,6 @@ import android.graphics.BitmapFactory
 import android.media.ThumbnailUtils
 import android.os.Bundle
 import android.provider.MediaStore
-import android.support.design.widget.Snackbar
-import android.support.v4.app.Fragment
-import android.support.v4.content.FileProvider
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +16,8 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import androidx.core.content.FileProvider
+import androidx.fragment.app.Fragment
 import br.ronanlima.opiniaodetudo.AppExecutors
 import br.ronanlima.opiniaodetudo.BuildConfig
 import br.ronanlima.opiniaodetudo.MainActivity
@@ -26,6 +25,7 @@ import br.ronanlima.opiniaodetudo.R
 import br.ronanlima.opiniaodetudo.data.ReviewRepository
 import br.ronanlima.opiniaodetudo.model.Review
 import br.ronanlima.opiniaodetudo.service.LocationService
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_form.*
 import java.io.ByteArrayOutputStream
 import java.io.File

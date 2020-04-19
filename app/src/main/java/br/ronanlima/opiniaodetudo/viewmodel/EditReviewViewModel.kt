@@ -1,7 +1,7 @@
 package br.ronanlima.opiniaodetudo.viewmodel
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import br.ronanlima.opiniaodetudo.model.Review
 
 /**

@@ -8,6 +8,7 @@
     <string name="action_delete">Excluir</string>
     <string name="new_item">Novo item</string>
     <string name="list_item">Listar itens</string>
+    <string name="list_settings">Preferências</string>
     <string name="salvar">Salvar</string>
     <string name="alerta_opiniao_vazia">Sério? Não vai escrever nada?</string>
     <string name="atualizar">Atualizar</string>
@@ -22,4 +23,20 @@
     <string name="erro_tirar_foto">Erro ao capturar a foto</string>
     <string name="abrir_no_mapa">Abrir no mapa</string>
     <string name="titulo_janela_edicao">Alteração</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Preference Titles -->
+    <string name="night_mode_header">Um layout mais agradável à noite</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="night_mode_title">Modo noturno</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 </resources>

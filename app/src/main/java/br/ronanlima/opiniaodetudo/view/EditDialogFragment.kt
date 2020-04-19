@@ -1,8 +1,6 @@
 package br.ronanlima.opiniaodetudo.view
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +9,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.ViewModelProviders
 import br.ronanlima.opiniaodetudo.AppExecutors
 import br.ronanlima.opiniaodetudo.R
 import br.ronanlima.opiniaodetudo.data.ReviewRepository
@@ -29,7 +29,7 @@ class EditDialogFragment : DialogFragment() {
     }
 
     override fun onResume() {
-        dialog.window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog?.window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         super.onResume()
     }
 

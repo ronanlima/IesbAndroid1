@@ -1,7 +1,7 @@
 package br.ronanlima.opiniaodetudo.infra.dao.room
 
-import android.arch.persistence.room.*
 import android.database.Cursor
+import androidx.room.*
 import br.ronanlima.opiniaodetudo.infra.dao.ReviewTableInfo
 import br.ronanlima.opiniaodetudo.model.Review
 

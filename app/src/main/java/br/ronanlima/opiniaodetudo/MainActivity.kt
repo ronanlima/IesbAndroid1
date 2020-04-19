@@ -2,27 +2,31 @@ package br.ronanlima.opiniaodetudo
 
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.support.design.widget.BottomNavigationView
-import android.support.v4.app.ActivityCompat
-import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.preference.PreferenceManager
 import br.ronanlima.opiniaodetudo.view.FormFragment
 import br.ronanlima.opiniaodetudo.view.ListFragment
+import br.ronanlima.opiniaodetudo.view.SettingsFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
-    private val fragments = mapOf(FORM_FRAGMENT to ::FormFragment, LIST_FRAGMENT to ::ListFragment)
+    private val fragments = mapOf(FORM_FRAGMENT to ::FormFragment, LIST_FRAGMENT to ::ListFragment, SETTINGS_FRAGMENT to ::SettingsFragment)
 
     companion object {
         val FORM_FRAGMENT = "formFragment"
         val LIST_FRAGMENT = "listFragment"
+        val SETTINGS_FRAGMENT = "preferenceFragment"
         val GPS_PERMISSION_RESULT = 102
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        chooseTheme()
         setContentView(R.layout.activity_main)
         supportFragmentManager
                 .beginTransaction()
@@ -34,12 +38,26 @@ class MainActivity : AppCompatActivity() {
         askForGPSPermission()
     }
 
+    fun chooseTheme() {
+        val nightMode = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(SettingsFragment.NIGHT_MODE_PREF, false)
+        if (nightMode) {
+            setTheme(R.style.AppThemeNight_NoActionBar)
+        } else {
+            setTheme(R.style.AppTheme_NoActionBar)
+        }
+    }
+
+    fun setNightMode() {
+        recreate()
+    }
+
     fun configureBottomMenu() {
         val botomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         botomNavigationView.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.action_new_item -> navigateTo(FORM_FRAGMENT)
                 R.id.action_list_item -> navigateTo(LIST_FRAGMENT)
+                R.id.action_list_settings -> navigateTo(SETTINGS_FRAGMENT)
             }
             true
         }
