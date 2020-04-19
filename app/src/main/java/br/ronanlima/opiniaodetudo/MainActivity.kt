@@ -28,14 +28,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         chooseTheme()
         setContentView(R.layout.activity_main)
-        supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.fragment_container, FormFragment())
-                .commit()
-//        configureAutoHiddenKeyboard()
         configureBottomMenu()
         if (savedInstanceState == null) {
-            navigateTo(FORM_FRAGMENT)
+            navigateTo(FORM_FRAGMENT, null)
         }
         askForGPSPermission()
     }
@@ -57,9 +52,9 @@ class MainActivity : AppCompatActivity() {
         val botomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         botomNavigationView.setOnNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.action_new_item -> navigateTo(FORM_FRAGMENT)
-                R.id.action_list_item -> navigateTo(LIST_FRAGMENT)
-                R.id.action_list_settings -> navigateTo(SETTINGS_FRAGMENT)
+                R.id.action_new_item -> navigateTo(FORM_FRAGMENT, true)
+                R.id.action_list_item -> navigateTo(LIST_FRAGMENT, true)
+                R.id.action_list_settings -> navigateTo(SETTINGS_FRAGMENT, true)
             }
             true
         }
@@ -81,15 +76,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun navigateTo(item: String) {
+    fun navigateTo(item: String, canAddBackstack: Boolean?) {
         val fragmentInstance: Fragment = fragments[item]?.invoke()!!
 
-        supportFragmentManager
-                .beginTransaction()
-                .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                .replace(R.id.fragment_container, fragmentInstance)
-                .addToBackStack(item)
-                .commit()
+        val transaction = supportFragmentManager.beginTransaction()
+
+        transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+        transaction.replace(R.id.fragment_container, fragmentInstance)
+        canAddBackstack?.let {
+            transaction.addToBackStack(item)
+        }
+        transaction.commit()
     }
 
 }

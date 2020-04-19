@@ -71,7 +71,7 @@ class FormFragment : Fragment() {
                     if (reviewToEdit == null) {
                         reviewToEdit = reviewRepository.save(etOpiniao.text.toString(), etTitle.text.toString(), file?.toRelativeString(activity!!.filesDir), thumbnailBytes)
                         limpaCampos()
-                        (activity!! as MainActivity).navigateTo(MainActivity.LIST_FRAGMENT)
+                        (activity!! as MainActivity).navigateTo(MainActivity.LIST_FRAGMENT, true)
                     } else {
                         reviewToEdit!!.opiniao = et_opiniao.text.toString()
                         reviewToEdit!!.titulo = et_title.text.toString()

@@ -9,13 +9,14 @@
         android:roundIcon="@mipmap/ic_launcher_new_round"
         android:supportsRtl="true"
         android:theme="@style/AppThemeNight.NoActionBar">
-        <activity android:name=".MainActivity">
+        <activity android:name=".view.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".MainActivity" />
         <activity android:name=".ListaActivity" />
 
         <provider
@@ -29,11 +30,11 @@
         </provider>
     </application>
     <uses-feature
-        android:name="android.hardware.location.gps"
+        android:name="android.hardware.camera2"
         android:required="false" />
 
     <uses-feature
-        android:name="android.hardware.camera2"
+        android:name="android.hardware.location.gps"
         android:required="false" />
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
